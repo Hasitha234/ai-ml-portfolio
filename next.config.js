@@ -3,11 +3,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+// Temporarily disable PWA for deployment
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
+  disable: true // Disabled for now to fix build issues
 })
 
 const securityHeaders = [
@@ -46,6 +47,14 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@headlessui/react', 'framer-motion'],
+    outputFileTracingExcludes: {
+      '*': [
+        'public/videos/**/*',
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild/**',
+      ],
+    },
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
@@ -72,7 +81,7 @@ const nextConfig = {
     ]
   },
   webpack: (config, { dev, isServer }) => {
-    // Existing video loader config
+    // Handle video files
     config.module.rules.push({
       test: /\.(mp4|webm)$/,
       use: {
@@ -85,21 +94,20 @@ const nextConfig = {
       },
     });
 
-    // Optimize images with sharp
-    config.module.rules.push({
-      test: /\.(jpe?g|png|svg|gif|ico|webp|avif)$/,
-      use: [
-        {
-          loader: 'sharp-loader',
-          options: {
-            optimizeImages: true
-          }
-        }
-      ]
-    });
+    // Avoid processing large files during build
+    config.watchOptions = {
+      ignored: ['**/public/videos/**', '**/node_modules/**']
+    };
 
     return config;
   },
+
+  // Add this for GitHub Pages deployment (uncomment when needed)
+  // output: 'export',
+  // trailingSlash: true,
+  // images: {
+  //   unoptimized: true
+  // }
 }
 
 // Wrap the config with bundle analyzer and PWA

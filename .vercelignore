@@ -1,0 +1,26 @@
+# Large video files (keep smaller ones)
+public/videos/*.mp4
+
+# Build artifacts
+.next/
+out/
+
+# Development files
+*.log
+.env.local
+.env.development.local
+
+# Large dependencies
+node_modules/@swc/core-linux-x64-gnu
+node_modules/@swc/core-linux-x64-musl
+node_modules/@esbuild/
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+coverage/
+
+# Lighthouse reports
+lighthouse-report.html 
