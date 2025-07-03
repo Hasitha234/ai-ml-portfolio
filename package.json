@@ -1,0 +1,115 @@
+{
+  "name": "ai-ml-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build",
+    "build:prod": "next build && next-sitemap",
+    "lighthouse": "lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html",
+    "optimize-videos": "node scripts/optimize-videos.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepare": "husky install",
+    "clean": "rm -rf .next out"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@next/bundle-analyzer": "^15.3.3",
+    "@prisma/client": "^6.10.1",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.12",
+    "@types/gtag.js": "^0.0.20",
+    "@types/nodemailer": "^6.4.17",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^0.2.0",
+    "critters": "^0.0.23",
+    "date-fns": "^3.6.0",
+    "framer-motion": "^10.18.0",
+    "lucide-react": "^0.301.0",
+    "next": "14.0.4",
+    "next-pwa": "^5.6.0",
+    "next-sitemap": "^4.2.3",
+    "nextjs-toploader": "^3.8.16",
+    "nodemailer": "^7.0.3",
+    "react": "^18.2.0",
+    "react-day-picker": "^9.7.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
+    "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.5.3",
+    "react-player": "^2.16.0",
+    "sharp": "^0.34.2",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.160.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.4",
+    "husky": "^9.1.7",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "lighthouse": "^12.6.1",
+    "postcss": "^8.4.32",
+    "prettier": "^3.5.3",
+    "prisma": "^6.10.1",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "performance": {
+    "budgets": [
+      {
+        "path": "/_next/static/chunks/*.js",
+        "maxSize": "200kB"
+      },
+      {
+        "path": "/_next/static/css/*.css",
+        "maxSize": "50kB"
+      },
+      {
+        "path": "/_next/static/media/*.{png,jpg,jpeg,gif,svg,webp}",
+        "maxSize": "100kB"
+      }
+    ],
+    "hints": {
+      "maxAssetSize": "250kb",
+      "maxEntrypointSize": "250kb"
+    }
+  }
+}

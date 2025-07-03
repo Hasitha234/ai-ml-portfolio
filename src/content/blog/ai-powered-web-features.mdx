@@ -1,0 +1,228 @@
+---
+title: "Building AI-Powered Features in Modern Web Applications"
+date: "2024-02-15"
+excerpt: "A practical guide to integrating AI capabilities into your web applications using modern tools and best practices."
+tags: ["AI", "Web Development", "OpenAI", "Machine Learning"]
+---
+
+# Building AI-Powered Features in Modern Web Applications
+
+Artificial Intelligence is transforming web development. Here's a practical guide to implementing AI features in your web applications while maintaining performance and user experience.
+
+## 1. Smart Search with Vector Embeddings
+
+### Implementation with Pinecone and OpenAI
+```typescript
+import { PineconeClient } from '@pinecone-database/pinecone'
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+
+export async function semanticSearch(query: string) {
+  // Generate embeddings for the search query
+  const embeddings = new OpenAIEmbeddings()
+  const queryEmbedding = await embeddings.embedQuery(query)
+
+  // Search in Pinecone
+  const pinecone = new PineconeClient()
+  await pinecone.init({
+    environment: process.env.PINECONE_ENV!,
+    apiKey: process.env.PINECONE_API_KEY!
+  })
+
+  const index = pinecone.Index('my-index')
+  const results = await index.query({
+    vector: queryEmbedding,
+    topK: 5,
+    includeMetadata: true
+  })
+
+  return results
+}
+```
+
+## 2. AI-Powered Content Generation
+
+### Blog Post Generator
+```typescript
+import { Configuration, OpenAIApi } from 'openai'
+
+export async function generateBlogPost(topic: string) {
+  const openai = new OpenAIApi(new Configuration({
+    apiKey: process.env.OPENAI_API_KEY
+  }))
+
+  const completion = await openai.createChatCompletion({
+    model: 'gpt-4',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a professional blog writer...'
+      },
+      {
+        role: 'user',
+        content: `Write a blog post about ${topic}`
+      }
+    ],
+    temperature: 0.7
+  })
+
+  return completion.data.choices[0].message?.content
+}
+```
+
+## 3. Intelligent Image Processing
+
+### Image Analysis with Tensorflow.js
+```typescript
+import * as tf from '@tensorflow/tfjs'
+import { load } from '@tensorflow-models/mobilenet'
+
+export async function analyzeImage(imageUrl: string) {
+  // Load MobileNet model
+  const model = await load()
+  
+  // Load and preprocess image
+  const img = new Image()
+  img.src = imageUrl
+  await img.decode()
+  
+  // Make prediction
+  const predictions = await model.classify(img)
+  
+  return predictions
+}
+```
+
+## 4. Real-time Language Translation
+
+### Implementation with Azure Cognitive Services
+```typescript
+import { TranslatorClient } from '@azure/ai-translator-text'
+
+export async function translateText(
+  text: string,
+  fromLang: string,
+  toLang: string
+) {
+  const client = new TranslatorClient(
+    process.env.AZURE_TRANSLATOR_KEY!,
+    process.env.AZURE_TRANSLATOR_REGION!
+  )
+
+  const [result] = await client.translate(text, {
+    from: fromLang,
+    to: [toLang]
+  })
+
+  return result.translations[0].text
+}
+```
+
+## 5. Recommendation System
+
+### Content-Based Filtering
+```typescript
+import { cosineSimilarity } from '@/lib/math'
+
+export function getRecommendations(
+  userProfile: number[],
+  items: Array<{ id: string; vector: number[] }>
+) {
+  return items
+    .map(item => ({
+      id: item.id,
+      similarity: cosineSimilarity(userProfile, item.vector)
+    }))
+    .sort((a, b) => b.similarity - a.similarity)
+    .slice(0, 5)
+}
+```
+
+## Best Practices
+
+1. **Error Handling**
+```typescript
+try {
+  const result = await aiOperation()
+  return result
+} catch (error) {
+  if (error.code === 'rate_limit_exceeded') {
+    await sleep(1000)
+    return retry(aiOperation)
+  }
+  throw error
+}
+```
+
+2. **Caching Results**
+```typescript
+import { redis } from '@/lib/redis'
+
+async function getCachedAIResult(key: string, operation: () => Promise<any>) {
+  const cached = await redis.get(key)
+  if (cached) return JSON.parse(cached)
+
+  const result = await operation()
+  await redis.set(key, JSON.stringify(result), 'EX', 3600)
+  return result
+}
+```
+
+3. **Progressive Enhancement**
+```tsx
+export default function AIFeature() {
+  const [aiEnabled, setAiEnabled] = useState(false)
+  const [fallbackEnabled, setFallbackEnabled] = useState(true)
+
+  return (
+    <div>
+      {aiEnabled ? (
+        <AIComponent fallback={<FallbackComponent />} />
+      ) : (
+        <FallbackComponent />
+      )}
+    </div>
+  )
+}
+```
+
+## Performance Considerations
+
+1. **Batch Processing**
+- Process multiple items in one API call
+- Use worker threads for heavy computations
+- Implement request queuing for rate limits
+
+2. **Optimizing API Costs**
+- Cache frequently requested results
+- Use cheaper models for less critical tasks
+- Implement request throttling
+
+3. **User Experience**
+- Show loading states and progress indicators
+- Provide instant feedback with optimistic UI
+- Gracefully handle failures
+
+## Security Best Practices
+
+1. **API Key Management**
+- Use environment variables
+- Implement key rotation
+- Set up usage monitoring
+
+2. **Input Validation**
+- Sanitize user inputs
+- Set rate limits per user
+- Implement content filtering
+
+3. **Output Sanitization**
+- Filter sensitive information
+- Validate AI-generated content
+- Implement content moderation
+
+## Conclusion
+
+AI features can significantly enhance web applications, but they require careful implementation with attention to performance, security, and user experience. Start small, measure impact, and scale gradually.
+
+---
+
+*Want to add AI features to your web application? [Let's discuss](#contact)* 

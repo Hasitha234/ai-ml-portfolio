@@ -1,0 +1,23 @@
+# Essential exclusions only
+temp_videos/
+.next/
+out/
+*.log
+node_modules/
+
+# Allow all video files for deployment
+# public/videos/*.mp4
+
+# Development files
+.env.local
+.env.development.local
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+coverage/
+
+# Lighthouse reports
+lighthouse-report.html 
